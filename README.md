@@ -98,5 +98,7 @@ A deployment script automates:
 - Tagging and pushing the image
 - Forcing ECS service to redeploy
 
+---
+
 ## 🏗️ Application Output
 ![Application Output](images/app.png)
