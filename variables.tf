@@ -51,3 +51,16 @@ variable "fargate_memory" {
   type        = number
   default     = 512
 }
+
+variable "desired_count" {
+  description = "Desire Count"
+  type        = number
+  default     = 2
+}
+
+/*
+variable "acm_certificate_arn" {
+  description = "ARN of the ACM SSL certificate"
+  type        = string
+}
+*/

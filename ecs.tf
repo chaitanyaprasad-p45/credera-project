@@ -66,6 +66,39 @@ resource "aws_ecs_task_definition" "app" {
   }
 }
 
+resource "aws_ecs_service" "app" {
+  name            = "${var.app_name}-service"
+  cluster         = aws_ecs_cluster.app.id
+  task_definition = aws_ecs_task_definition.app.arn
+  launch_type     = "FARGATE"
+  desired_count   = var.desired_count
+
+  network_configuration {
+    subnets         = aws_subnet.public[*].id
+    assign_public_ip = true
+    security_groups = [aws_security_group.ecs_sg.id]
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = var.app_name
+    container_port   = var.app_port
+  }
+
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+
+  enable_ecs_managed_tags = true
+  propagate_tags           = "SERVICE"
+
+  tags = {
+    Name = "${var.app_name}-service"
+  }
+
+  depends_on = [aws_lb_listener.app]
+}
+
+
 resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/${var.app_name}"
   retention_in_days = 7

@@ -47,3 +47,25 @@ resource "aws_lb_listener" "app" {
     Name = "${var.app_name}-listener"
   }
 }
+
+/*
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.app.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+  tags = {
+    Name = "${var.app_name}-http-redirect"
+  }
+}
+*/
